@@ -9,14 +9,19 @@ public class PinSetter : MonoBehaviour {
     public GameObject pinsPrefab;
     public Vector3 pinsPosition;
 
-    private Ball ball;
-    private bool havePinsStopped = false;
     private bool ballEnteredTrigger = false;
+    private Ball ball;
+    private bool havePinsStopped = false;    
     private float timer = 0f;
+    private int fallenPins, standingPinsAtStart;
+    private ActionMaster actionMaster;
+    private Animator anim;
 
 	// Use this for initialization
 	void Start () {
         ball = GameObject.FindObjectOfType<Ball>();
+        actionMaster = new ActionMaster();
+        anim = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -24,19 +29,36 @@ public class PinSetter : MonoBehaviour {
 
         if (ballEnteredTrigger) {
             
+
             timer += Time.deltaTime;
 
             standingDisplay.text = CountStandingPins().ToString();
             HavePinsStopped();
 
             if (havePinsStopped && timer > waitTime) {
-                
+                fallenPins = standingPinsAtStart - CountStandingPins();
+                ActionMaster.Action action = actionMaster.Bowl(fallenPins);
+                Debug.Log("Pins fallen: " + fallenPins + " " + action);
+
+                switch(action) {
+                    case ActionMaster.Action.Tidy:
+                        anim.SetTrigger("triggerTidy");
+                        break;
+                    case ActionMaster.Action.Reset:
+                        anim.SetTrigger("triggerReset");
+                        break;
+                    case ActionMaster.Action.EndGame:
+                        anim.SetTrigger("triggerReset");
+                        break;
+                    case ActionMaster.Action.EndTurn:
+                        anim.SetTrigger("triggerReset");
+                        break;
+                }                
+
                 ballEnteredTrigger = false;
                 timer = 0f;
                 ball.Reset();
-            } else {
-                
-            }
+            } 
         }
 	
 	}
@@ -115,10 +137,15 @@ public class PinSetter : MonoBehaviour {
         havePinsStopped = true;
     }
 
+    public void BallExitedLane() {
+        standingPinsAtStart = CountStandingPins();
+        ballEnteredTrigger = true;
+    }
+
     void OnTriggerEnter(Collider collider) {
 
         if (collider.gameObject.GetComponent<Ball>()) {
-            ballEnteredTrigger = true;
+            BallExitedLane();
         }
     }
 

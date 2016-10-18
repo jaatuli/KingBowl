@@ -182,7 +182,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4d003bb393af0b4c8dea9c854382841, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  launchVelocity: {x: 8, y: 0, z: 500}
   inPlay: 0
   standingDisplay: {fileID: 0}
 --- !u!114 &114000013573231862
@@ -196,7 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4b7d247a9465a940ac5564945968439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sideWaysMultiplier: 0.2
+  sideWaysMultiplier: 0.5
   speedMultiplier: 0.5
 --- !u!135 &135000010309978310
 SphereCollider:

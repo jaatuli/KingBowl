@@ -2,14 +2,13 @@
 using System.Collections;
 
 public class Ball : MonoBehaviour {
-
-    public Vector3 launchVelocity;
+        
     public bool inPlay = true;
+    public UnityEngine.UI.Text standingDisplay;
 
     private Rigidbody body;
     private AudioSource audioSource;
-    private Vector3 startPosition;
-    public UnityEngine.UI.Text standingDisplay;
+    private Vector3 startPosition;    
 
     // Use this for initialization
     void Start () {
@@ -20,10 +19,11 @@ public class Ball : MonoBehaviour {
 
     }
 
-    public void Launch (Vector3 velocity) {
+    public void Launch (float velocity, float rotation) {
         if (!inPlay) {
             body.useGravity = true;
-            body.velocity = velocity;
+            body.velocity = new Vector3(0f, 0f, velocity);
+            body.angularVelocity = new Vector3(0f,0f,-rotation); 
             audioSource.Play();
             inPlay = true;
             standingDisplay.color = Color.red;
@@ -34,7 +34,8 @@ public class Ball : MonoBehaviour {
         body.useGravity = false;
         body.velocity = Vector3.zero;
         body.angularVelocity = Vector3.zero;
-        transform.position = startPosition;       
+        transform.position = startPosition;
+        transform.rotation = Quaternion.identity;     
         inPlay = false;
         standingDisplay.color = Color.green;
     }

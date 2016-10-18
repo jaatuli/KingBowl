@@ -34,6 +34,7 @@ public class Pin : MonoBehaviour {
 
     public void RaisePin(float distance) {
         body.isKinematic = true;
+        transform.rotation = Quaternion.identity;
         transform.Translate(new Vector3(0f, distance, 0f));
     }
 
